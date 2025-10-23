@@ -44,7 +44,7 @@ const menuItems = {
     {
       label: 'Dashboard',
       icon: LayoutDashboard,
-      href: '/tutor',
+      href: '/tutor/dashboard',
     },
     {
       label: 'Estudiantes',
@@ -66,7 +66,7 @@ const menuItems = {
     {
       label: 'Dashboard',
       icon: LayoutDashboard,
-      href: '/admin',
+      href: '/admin/dashboard',
     },
     {
       label: 'Usuarios',

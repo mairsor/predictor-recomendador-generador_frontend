@@ -30,9 +30,9 @@ export default function LoginPage() {
       if (user?.role === 'student') {
         router.push('/student');
       } else if (user?.role === 'tutor') {
-        router.push('/tutor');
+        router.push('/tutor/dashboard');
       } else if (user?.role === 'admin') {
-        router.push('/admin');
+        router.push('/admin/dashboard');
       }
     } catch (err: any) {
       setError(err.response?.data?.message || 'Error al iniciar sesión');
