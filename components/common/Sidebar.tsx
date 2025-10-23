@@ -22,22 +22,22 @@ const menuItems = {
     {
       label: 'Dashboard',
       icon: LayoutDashboard,
-      href: '/student',
+      href: '/dashboard',
     },
     {
       label: 'Recomendaciones',
       icon: BookOpen,
-      href: '/student/recommendations',
+      href: '/recommendations',
     },
     {
       label: 'Horarios',
       icon: Calendar,
-      href: '/student/schedules',
+      href: '/schedules',
     },
     {
       label: 'Predicciones',
       icon: BarChart3,
-      href: '/student/predictions',
+      href: '/predictions',
     },
   ],
   tutor: [
