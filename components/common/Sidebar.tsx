@@ -22,7 +22,7 @@ const menuItems = {
     {
       label: 'Dashboard',
       icon: LayoutDashboard,
-      href: '/dashboard',
+      href: '/student',
     },
     {
       label: 'Recomendaciones',
@@ -44,7 +44,7 @@ const menuItems = {
     {
       label: 'Dashboard',
       icon: LayoutDashboard,
-      href: '/tutor/dashboard',
+      href: '/tutor',
     },
     {
       label: 'Estudiantes',
@@ -66,7 +66,7 @@ const menuItems = {
     {
       label: 'Dashboard',
       icon: LayoutDashboard,
-      href: '/admin/dashboard',
+      href: '/admin',
     },
     {
       label: 'Usuarios',
@@ -77,6 +77,11 @@ const menuItems = {
       label: 'Cursos',
       icon: BookOpen,
       href: '/admin/courses',
+    },
+    {
+      label: 'Secciones',
+      icon: Calendar,
+      href: '/admin/sections',
     },
     {
       label: 'Analíticas',

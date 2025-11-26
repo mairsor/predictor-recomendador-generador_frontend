@@ -347,17 +347,20 @@ export const backendService = {
   dashboard: {
     async getMyDashboard(): Promise<DashboardAlumno | DashboardProfesor | DashboardAdmin> {
       const response = await api.get('/dashboard/me');
-      return response.data;
+      console.log('Raw response:', response);
+      console.log('response.data:', response.data);
+      // El backend devuelve { message, data }, así que accedemos a data
+      return response.data?.data || response.data;
     },
 
     async getAlumnoDashboard(): Promise<DashboardAlumno> {
       const response = await api.get('/dashboard/alumno');
-      return response.data;
+      return response.data?.data || response.data;
     },
 
     async getProfesorDashboard(): Promise<DashboardProfesor> {
       const response = await api.get('/dashboard/profesor');
-      return response.data;
+      return response.data?.data || response.data;
     },
 
     async getAdminDashboard(): Promise<DashboardAdmin> {
@@ -602,6 +605,39 @@ export const backendService = {
 
     async remove(id: number): Promise<void> {
       await api.delete(`/requisito/${id}`);
+    },
+  },
+
+  // Cursos Ofertados endpoints
+  ofertado: {
+    async create(data: CreateCursoOfertadoDto): Promise<CursoOfertado> {
+      const response = await api.post('/ofertado', data);
+      return response.data;
+    },
+    async findAll(params?: { semestre?: string; cursoId?: number; profesorId?: number }): Promise<CursoOfertado[]> {
+      const response = await api.get('/ofertado', { params });
+      return response.data;
+    },
+    async findOne(id: number): Promise<CursoOfertado> {
+      const response = await api.get(`/ofertado/${id}`);
+      return response.data;
+    },
+    async update(id: number, data: Partial<CreateCursoOfertadoDto>): Promise<CursoOfertado> {
+      const response = await api.patch(`/ofertado/${id}`, data);
+      return response.data;
+    },
+    async remove(id: number): Promise<void> {
+      await api.delete(`/ofertado/${id}`);
+    },
+    async uploadCSV(file: File): Promise<{ created: number; errors: any[] }> {
+      const formData = new FormData();
+      formData.append('file', file);
+      const response = await api.post('/ofertado/upload', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      return response.data;
     },
   },
 };

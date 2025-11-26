@@ -27,6 +27,7 @@ export default function LoginPage() {
 
       const user = useAuthStore.getState().user;
 
+      // Redirigir según el rol
       if (user?.role === 'student') {
         router.push('/student');
       } else if (user?.role === 'tutor') {
@@ -35,7 +36,10 @@ export default function LoginPage() {
         router.push('/admin/dashboard');
       }
     } catch (err: any) {
-      setError(err.response?.data?.message || 'Error al iniciar sesión');
+      // Mostrar error específico del backend
+      const errorMessage = err.message || err.response?.data?.message || 'Error al iniciar sesión. Verifica tus credenciales.';
+      setError(errorMessage);
+      console.error('Login error:', err);
     } finally {
       setIsLoading(false);
     }
@@ -109,6 +113,26 @@ export default function LoginPage() {
             <a href="#" className="hover:text-uni-primary transition-colors">
               ¿Olvidaste tu contraseña?
             </a>
+          </div>
+
+          {/* Usuarios de prueba */}
+          <div className="mt-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
+            <p className="text-xs font-semibold text-gray-700 mb-2">
+              Usuarios de prueba:
+            </p>
+            <div className="space-y-1 text-xs text-gray-600">
+              <div className="flex justify-between">
+                <span>Admin:</span>
+                <code className="bg-white px-2 py-0.5 rounded">admin@uni.edu.pe</code>
+              </div>
+              <div className="flex justify-between">
+                <span>Contraseña:</span>
+                <code className="bg-white px-2 py-0.5 rounded">admin123</code>
+              </div>
+            </div>
+            <p className="text-xs text-gray-500 mt-2 italic">
+              Nota: Solo usuarios registrados en el sistema pueden acceder
+            </p>
           </div>
         </div>
       </div>

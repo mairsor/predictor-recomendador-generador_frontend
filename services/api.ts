@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // URLs de las APIs
-const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:4000';
+const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:3003';
 const PREDICTOR_URL = process.env.NEXT_PUBLIC_PREDICTOR_URL || 'http://localhost:8000';
 const RECOMENDADOR_URL = process.env.NEXT_PUBLIC_RECOMENDADOR_URL || 'http://localhost:8001';
 
@@ -11,6 +11,7 @@ const api = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
+  timeout: 10000, // 10 segundos de timeout
 });
 
 // Cliente API para Predictor de Demanda

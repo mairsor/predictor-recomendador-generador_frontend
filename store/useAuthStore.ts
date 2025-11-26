@@ -1,54 +1,82 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { AuthState } from '@/types';
+import backendService from '@/services/backendService';
+import api from '@/services/api';
+
+// Mapeo de roles del backend al frontend
+const mapRoleToFrontend = (backendRole: 'ALUMNO' | 'PROFESOR' | 'ADMIN'): 'student' | 'tutor' | 'admin' => {
+  switch (backendRole) {
+    case 'ALUMNO':
+      return 'student';
+    case 'PROFESOR':
+      return 'tutor';
+    case 'ADMIN':
+      return 'admin';
+    default:
+      return 'student';
+  }
+};
 
 export const useAuthStore = create<AuthState>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       user: null,
       token: null,
       isAuthenticated: false,
 
-      // Development helper: accept any credentials and set a local user.
-      // This disables real authentication and should only be used in dev/testing.
       login: async (email: string, password: string) => {
         try {
-          // small delay to simulate network
-          await new Promise((res) => setTimeout(res, 150));
+          // Llamar a la API real del backend
+          const response = await backendService.auth.login({ email, password });
 
-          // Infer role from email for convenience: 'admin' or 'tutor' in address -> that role, otherwise student
-          const lowered = email?.toLowerCase() || '';
-          const role: 'student' | 'tutor' | 'admin' = lowered.includes('admin')
-            ? 'admin'
-            : lowered.includes('tutor')
-            ? 'tutor'
-            : 'student';
-
+          // Mapear la respuesta del backend al formato del frontend
           const user = {
-            id: `local-${Date.now()}`,
-            email,
-            name: (email && email.split('@')[0]) || 'Usuario',
-            role,
+            id: response.user.id.toString(),
+            email: response.user.email,
+            name: response.user.email.split('@')[0], // Usar email como nombre por ahora
+            role: mapRoleToFrontend(response.user.rol),
           };
 
-          const token = 'local-dev-token';
+          const token = response.access_token;
+
+          // Configurar el token en el cliente axios para futuras peticiones
+          api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 
           set({ user, token, isAuthenticated: true });
-        } catch (error) {
-          console.error('Login error (local):', error);
-          throw error;
+        } catch (error: any) {
+          console.error('Login error:', error);
+          // Propagar el error con un mensaje más específico
+          const errorMessage = error.response?.data?.message || 'Credenciales inválidas';
+          throw new Error(errorMessage);
         }
       },
 
-      logout: () => {
-        set({
-          user: null,
-          token: null,
-          isAuthenticated: false,
-        });
+      logout: async () => {
+        try {
+          // Intentar llamar al endpoint de logout del backend
+          await backendService.auth.logout();
+        } catch (error) {
+          console.error('Logout error:', error);
+          // Continuar con el logout local aunque falle el backend
+        } finally {
+          // Limpiar el token del cliente axios
+          delete api.defaults.headers.common['Authorization'];
+          
+          set({
+            user: null,
+            token: null,
+            isAuthenticated: false,
+          });
+        }
       },
 
       setUser: (user, token) => {
+        // Configurar el token en el cliente axios
+        if (token) {
+          api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+        }
+        
         set({
           user,
           token,
@@ -58,6 +86,14 @@ export const useAuthStore = create<AuthState>()(
     }),
     {
       name: 'auth-storage',
+      // Restaurar el token en axios cuando se carga desde localStorage
+      onRehydrateStorage: () => (state) => {
+        if (state?.token && state?.user) {
+          api.defaults.headers.common['Authorization'] = `Bearer ${state.token}`;
+          // Asegurarse de que isAuthenticated se actualice después de rehidratar
+          state.isAuthenticated = true;
+        }
+      },
     }
   )
 );
