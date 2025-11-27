@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react';
 import { useAuthStore } from '@/store/useAuthStore';
 import { useRouter } from 'next/navigation';
 import backendService from '@/services/backendService';
-import MainLayout from '@/components/common/MainLayout';
 import DashboardStats from '@/components/student/DashboardStats';
 import ProgressIndicator from '@/components/student/ProgressIndicator';
 import CurrentCourses from '@/components/student/CurrentCourses';
@@ -153,36 +152,34 @@ export default function StudentDashboard() {
   const alerts = generateAlerts();
 
   return (
-    <MainLayout>
-      <div className="space-y-6">
-        {/* Estadísticas principales */}
-        <DashboardStats
-          creditosAprobados={dashboardData.creditos.aprobados}
-          promedioPonderado={dashboardData.creditos.promedio}
-          cicloRelativo={dashboardData.alumno.ciclo_relativo}
-          tasaAprobacion={dashboardData.estadisticas.tasa_aprobacion}
-        />
+    <div className="space-y-6">
+      {/* Estadísticas principales */}
+      <DashboardStats
+        creditosAprobados={dashboardData.creditos.aprobados}
+        promedioPonderado={dashboardData.creditos.promedio}
+        cicloRelativo={dashboardData.alumno.ciclo_relativo}
+        tasaAprobacion={dashboardData.estadisticas.tasa_aprobacion}
+      />
 
-        {/* Grid de progreso y cursos */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div className="lg:col-span-1">
-            <ProgressIndicator
-              creditosAprobados={dashboardData.creditos.aprobados}
-              cicloRelativo={dashboardData.alumno.ciclo_relativo}
-            />
-          </div>
-          <div className="lg:col-span-2">
-            <CurrentCourses
-              courses={dashboardData.semestre_actual.cursos}
-              semestre={dashboardData.semestre_actual.semestre}
-              totalCreditos={dashboardData.semestre_actual.total_creditos}
-            />
-          </div>
+      {/* Grid de progreso y cursos */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="lg:col-span-1">
+          <ProgressIndicator
+            creditosAprobados={dashboardData.creditos.aprobados}
+            cicloRelativo={dashboardData.alumno.ciclo_relativo}
+          />
         </div>
-
-        {/* Panel de alertas */}
-        <AlertsPanel alerts={alerts} />
+        <div className="lg:col-span-2">
+          <CurrentCourses
+            courses={dashboardData.semestre_actual.cursos}
+            semestre={dashboardData.semestre_actual.semestre}
+            totalCreditos={dashboardData.semestre_actual.total_creditos}
+          />
+        </div>
       </div>
-    </MainLayout>
+
+      {/* Panel de alertas */}
+      <AlertsPanel alerts={alerts} />
+    </div>
   );
 }

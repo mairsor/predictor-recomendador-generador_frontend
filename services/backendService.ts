@@ -162,20 +162,22 @@ export interface Curso {
   codigo: string;
   nombre: string;
   creditos: number;
-  horasTeoria: number;
-  horasPractica: number;
+  ht: number; // Horas teoría
+  hp: number; // Horas práctica
+  hl: number; // Horas laboratorio
   ciclo: number;
   tipo: string;
-  createdAt: string;
-  updatedAt: string;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface CreateCursoDto {
   codigo: string;
   nombre: string;
   creditos: number;
-  horasTeoria: number;
-  horasPractica: number;
+  ht: number;
+  hp: number;
+  hl: number;
   ciclo: number;
   tipo: string;
 }
@@ -425,8 +427,8 @@ export const backendService = {
       return response.data;
     },
 
-    async findAll(): Promise<Profesor[]> {
-      const response = await api.get('/profesor');
+    async findAll(page = 1, limit = 1000): Promise<Profesor[]> {
+      const response = await api.get('/profesor', { params: { page, limit } });
       return response.data;
     },
 
@@ -463,8 +465,10 @@ export const backendService = {
       return response.data;
     },
 
-    async findAll(): Promise<Curso[]> {
-      const response = await api.get('/curso');
+    async findAll(page = 1, limit = 1000): Promise<Curso[]> {
+      const response = await api.get('/curso', {
+        params: { page, limit },
+      });
       return response.data;
     },
 

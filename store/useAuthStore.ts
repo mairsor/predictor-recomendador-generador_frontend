@@ -36,6 +36,7 @@ export const useAuthStore = create<AuthState>()(
             email: response.user.email,
             name: response.user.email.split('@')[0], // Usar email como nombre por ahora
             role: mapRoleToFrontend(response.user.rol),
+            codigo: response.user.alumno?.codigo || response.user.profesor?.codigo_profesor,
           };
 
           const token = response.access_token;

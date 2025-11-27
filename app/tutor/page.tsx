@@ -142,7 +142,7 @@ export default function TutorDashboard() {
               </div>
               <div>
                 <p className="text-sm text-gray-500">Popularidad</p>
-                <p className="text-lg font-semibold">{profesor.popularidad.toFixed(1)} ⭐</p>
+                <p className="text-lg font-semibold">{(profesor.popularidad * 100).toFixed(0)}% ⭐</p>
               </div>
             </div>
           </CardContent>

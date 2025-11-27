@@ -33,7 +33,7 @@ export default function LoginPage() {
       } else if (user?.role === 'tutor') {
         router.push('/tutor/dashboard');
       } else if (user?.role === 'admin') {
-        router.push('/admin/dashboard');
+        router.push('/admin');
       }
     } catch (err: any) {
       // Mostrar error específico del backend

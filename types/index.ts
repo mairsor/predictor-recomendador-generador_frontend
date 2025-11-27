@@ -4,6 +4,7 @@ export interface User {
   name: string;
   role: 'student' | 'tutor' | 'admin';
   avatar?: string;
+  codigo?: string; // Código de alumno o profesor
 }
 
 export interface AuthState {
