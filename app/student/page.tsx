@@ -61,10 +61,10 @@ export default function StudentDashboard() {
   // Mostrar loading mientras se monta el componente
   if (!mounted || loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
         <div className="text-center">
           <Loader2 className="h-12 w-12 animate-spin text-uni-primary mx-auto mb-4" />
-          <p className="text-gray-600">Cargando dashboard...</p>
+          <p className="text-gray-600 dark:text-gray-400">Cargando dashboard...</p>
         </div>
       </div>
     );
@@ -72,10 +72,10 @@ export default function StudentDashboard() {
 
   if (error) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
         <div className="text-center">
-          <div className="bg-red-50 border border-red-200 rounded-lg p-6 max-w-md">
-            <p className="text-red-800">{error}</p>
+          <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-6 max-w-md">
+            <p className="text-red-800 dark:text-red-300">{error}</p>
           </div>
         </div>
       </div>
@@ -84,8 +84,8 @@ export default function StudentDashboard() {
 
   if (!dashboardData) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <p className="text-gray-600">No se encontraron datos del alumno</p>
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
+        <p className="text-gray-600 dark:text-gray-400">No se encontraron datos del alumno</p>
       </div>
     );
   }

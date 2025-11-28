@@ -52,19 +52,19 @@ export default function AlertsPanel({ alerts }: AlertsPanelProps) {
   const displayAlerts = alerts.length > 0 ? alerts : generateDefaultAlerts();
 
   return (
-    <Card>
+    <Card className="dark:bg-gray-800 dark:border-gray-700">
       <CardHeader>
-        <CardTitle className="text-lg flex items-center space-x-2">
+        <CardTitle className="text-lg flex items-center space-x-2 dark:text-white">
           <Clock className="h-5 w-5" />
           <span>Alertas y Notificaciones</span>
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-3">
         {displayAlerts.map((alert, index) => (
-          <Alert key={index} variant={getVariant(alert.type)}>
+          <Alert key={index} variant={getVariant(alert.type)} className="dark:bg-gray-700/50 dark:border-gray-600">
             {getIcon(alert.type)}
-            <AlertTitle>{alert.title}</AlertTitle>
-            <AlertDescription>{alert.description}</AlertDescription>
+            <AlertTitle className="dark:text-gray-200">{alert.title}</AlertTitle>
+            <AlertDescription className="dark:text-gray-300">{alert.description}</AlertDescription>
           </Alert>
         ))}
       </CardContent>

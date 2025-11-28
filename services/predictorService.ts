@@ -1,12 +1,12 @@
 /**
  * Servicio para comunicación con la API del Predictor de Demanda
  * Puerto: 8000
- * Base URL: http://localhost:8000
+ * Base URL: Configurable via NEXT_PUBLIC_PREDICTOR_URL
  */
 
 import axios from 'axios';
 
-const PREDICTOR_API_URL = 'http://localhost:8000';
+const PREDICTOR_API_URL = process.env.NEXT_PUBLIC_PREDICTOR_URL || 'http://localhost:8000';
 
 const predictorApi = axios.create({
   baseURL: PREDICTOR_API_URL,

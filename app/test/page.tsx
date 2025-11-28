@@ -151,7 +151,7 @@ export default function TestPage() {
         {/* Información de Conexión */}
         <div className="bg-blue-50 p-6 rounded-lg border border-blue-200">
           <h3 className="font-semibold mb-2">📡 Configuración de Backend</h3>
-          <p className="text-sm">URL: http://172.232.188.183:3003</p>
+          <p className="text-sm">URL: {process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:3003'}</p>
           <p className="text-xs text-gray-600 mt-2">
             Abre la consola del navegador (F12) para ver más detalles de las peticiones.
           </p>

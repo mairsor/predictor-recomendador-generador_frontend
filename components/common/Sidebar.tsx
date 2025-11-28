@@ -35,9 +35,25 @@ const menuItems = {
       href: '/student/recommendations',
     },
     {
-      label: 'Predicciones',
-      icon: BarChart3,
-      href: '/predictions',
+      label: 'Predictor de Demanda',
+      icon: Target,
+      submenu: [
+        {
+          label: 'Ver Predicciones',
+          icon: BarChart3,
+          href: '/student/demand-predictions',
+        },
+        {
+          label: 'Resultados',
+          icon: FileText,
+          href: '/student/demand-results',
+        },
+      ],
+    },
+    {
+      label: 'Configuración',
+      icon: Settings,
+      href: '/student/settings',
     },
   ],
   tutor: [
@@ -63,9 +79,30 @@ const menuItems = {
       ],
     },
     {
-      label: 'Predicciones',
-      icon: BarChart3,
-      href: '/tutor/predictions',
+      label: 'Predictor de Demanda',
+      icon: Target,
+      submenu: [
+        {
+          label: 'Predicciones',
+          icon: BarChart3,
+          href: '/tutor/demand-predictor',
+        },
+        {
+          label: 'Resultados',
+          icon: FileText,
+          href: '/tutor/demand-results',
+        },
+        {
+          label: 'Modelos ML',
+          icon: Settings,
+          href: '/tutor/demand-models',
+        },
+      ],
+    },
+    {
+      label: 'Configuración',
+      icon: Settings,
+      href: '/tutor/settings',
     },
   ],
   admin: [
@@ -145,7 +182,7 @@ export default function Sidebar({ role }: SidebarProps) {
   };
 
   return (
-    <aside className="w-64 bg-uni-primary min-h-screen text-white">
+    <aside className="w-64 bg-uni-primary dark:bg-gray-800 min-h-screen text-white transition-colors">
       <nav className="p-4 space-y-2">
         {items.map((item: any) => {
           const Icon = item.icon;
