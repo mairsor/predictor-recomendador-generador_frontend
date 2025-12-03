@@ -13,6 +13,17 @@ export interface LoginResponse {
     id: number;
     email: string;
     rol: 'ALUMNO' | 'PROFESOR' | 'ADMIN';
+    alumno?: {
+      codigo: string;
+      nombres?: string;
+      apellidos?: string;
+      [key: string]: any;
+    };
+    profesor?: {
+      codigo_profesor: string;
+      nombre?: string;
+      [key: string]: any;
+    };
   };
 }
 
@@ -264,6 +275,15 @@ export interface CreateRequisitoDto {
   tipo: 'PREREQUISITO' | 'CORREQUISITO';
 }
 
+// Respuesta paginada del backend
+export interface PaginatedResponse<T> {
+  data: T[];
+  currentPage: number;
+  pageCount: number;
+  totalCount: number;
+  totalPages: number;
+}
+
 // ==================== SERVICIOS ====================
 
 export const backendService = {
@@ -376,7 +396,7 @@ export const backendService = {
       return response.data;
     },
 
-    async findAll(params?: { page?: number; limit?: number; search?: string }): Promise<Alumno[]> {
+    async findAll(params?: { page?: number; limit?: number; search?: string }): Promise<Alumno[] | PaginatedResponse<Alumno>> {
       const response = await api.get('/alumno', { params });
       return response.data;
     },
@@ -463,7 +483,7 @@ export const backendService = {
       return response.data;
     },
 
-    async findAll(page = 1, limit = 1000): Promise<Curso[]> {
+    async findAll(page = 1, limit = 1000): Promise<Curso[] | PaginatedResponse<Curso>> {
       const response = await api.get('/curso', {
         params: { page, limit },
       });
