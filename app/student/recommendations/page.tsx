@@ -33,22 +33,17 @@ export default function RecommendationsPage() {
   const [topK, setTopK] = useState(10);
 
   const loadData = async () => {
-    if (!user?.codigo) {
-      setError('No se encontró el código de alumno');
-      setLoading(false);
-      return;
-    }
-
     try {
       setLoading(true);
       setError('');
 
-      // El sistema de recomendaciones usa códigos de prueba (ALUMNO_001, ALUMNO_002, etc.)
-      // Si el código real no existe, usar ALUMNO_001 como demostración
-      let studentCode = user.codigo;
+      // El sistema de recomendaciones usa códigos de prueba
+      // Intentar con el código del usuario, sino con ALUMNO_REAL como demostración
+      let studentCode = user?.codigo || 'ALUMNO_REAL';
+      let usingDemo = !user?.codigo;
       
       try {
-        // Intentar con el código real primero
+        // Intentar con el código del usuario o ALUMNO_REAL
         const [info, recs] = await Promise.all([
           recommenderService.students.getInfo(studentCode),
           recommenderService.students.getRecommendations(studentCode, topK),
@@ -56,11 +51,15 @@ export default function RecommendationsPage() {
         
         setStudentInfo(info);
         setRecommendations(recs.recommendations);
+        
+        if (usingDemo) {
+          setError('⚠️ Usando datos de demostración (ALUMNO_REAL). Tu código no está registrado en el sistema.');
+        }
       } catch (firstError: any) {
-        // Si falla con el código real, intentar con código de prueba
-        if (firstError.response?.status === 404) {
-          console.log(`Código ${studentCode} no encontrado, usando ALUMNO_001 como demo`);
-          studentCode = 'ALUMNO_001';
+        // Si falla, intentar con ALUMNO_REAL como fallback final
+        if (firstError.response?.status === 404 && studentCode !== 'ALUMNO_REAL') {
+          console.log(`Código ${studentCode} no encontrado, usando ALUMNO_REAL como demo`);
+          studentCode = 'ALUMNO_REAL';
           
           const [info, recs] = await Promise.all([
             recommenderService.students.getInfo(studentCode),
@@ -69,7 +68,7 @@ export default function RecommendationsPage() {
           
           setStudentInfo(info);
           setRecommendations(recs.recommendations);
-          setError('⚠️ Usando datos de demostración. Tu código no está en el sistema de recomendaciones.');
+          setError('⚠️ Usando datos de demostración (ALUMNO_REAL). Tu código no está en el sistema de recomendaciones.');
         } else {
           throw firstError;
         }

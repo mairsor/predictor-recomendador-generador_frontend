@@ -65,7 +65,7 @@ api.interceptors.response.use(
 );
 
 // Interceptor para agregar auth token a las APIs de ML (si es necesario)
-const addAuthInterceptor = (apiClient: typeof axios) => {
+const addAuthInterceptor = (apiClient: ReturnType<typeof axios.create>) => {
   apiClient.interceptors.request.use(
     (config) => {
       const authStorage = localStorage.getItem('auth-storage');

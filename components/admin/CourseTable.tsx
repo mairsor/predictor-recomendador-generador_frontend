@@ -63,7 +63,7 @@ export default function CourseTable() {
     hp: 0,
     hl: 0,
     ciclo: 1,
-    tipo: 'OBLIGATORIO',
+    tipo: 'O',
   });
 
   useEffect(() => {
@@ -88,14 +88,33 @@ export default function CourseTable() {
     try {
       setLoading(true);
       setError('');
+      console.log('Cargando cursos...');
       const response = await backendService.cursos.findAll();
-      // El backend devuelve un objeto paginado con la propiedad 'data'
-      const coursesData = Array.isArray(response) ? response : (response.data || []);
+      console.log('Respuesta del servidor:', response);
+      
+      // El backend devuelve {data: [...], currentPage, pageCount, etc}
+      // o directamente un array
+      let coursesData: Curso[] = [];
+      if (Array.isArray(response)) {
+        coursesData = response;
+      } else if (response && Array.isArray(response.data)) {
+        coursesData = response.data;
+      }
+      
+      console.log('Cursos procesados:', coursesData.length);
       setCourses(coursesData);
       setFilteredCourses(coursesData);
     } catch (err: any) {
       console.error('Error cargando cursos:', err);
-      setError('Error al cargar los cursos');
+      console.error('Detalles del error:', {
+        message: err.message,
+        response: err.response?.data,
+        status: err.response?.status
+      });
+      const errorMessage = err.response?.status === 401 
+        ? 'No autorizado. Por favor, inicia sesión nuevamente.'
+        : err.response?.data?.message || 'Error al cargar los cursos';
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -190,6 +209,8 @@ export default function CourseTable() {
       </div>
     );
   }
+
+  console.log('Estado antes de renderizar:', { courses: courses.length, filteredCourses: filteredCourses.length, loading, error });
 
   return (
     <div className="space-y-6">

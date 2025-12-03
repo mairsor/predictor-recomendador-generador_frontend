@@ -59,7 +59,18 @@ export default function PredictorPage() {
   const loadCursos = async () => {
     try {
       const response = await backendService.cursos.findAll();
-      const cursosData = Array.isArray(response) ? response : (response.data || []);
+      console.log('Respuesta de cursos en predictor:', response);
+      
+      // El backend devuelve {data: [...], currentPage, pageCount, etc}
+      // o directamente un array
+      let cursosData: Curso[] = [];
+      if (Array.isArray(response)) {
+        cursosData = response;
+      } else if (response && Array.isArray(response.data)) {
+        cursosData = response.data;
+      }
+      
+      console.log('Cursos cargados en predictor:', cursosData.length);
       setCursos(cursosData);
     } catch (err: any) {
       console.error('Error cargando cursos:', err);

@@ -140,21 +140,18 @@ export interface UpdateAlumnoDto {
 
 export interface Profesor {
   id: number;
-  codigo: string;
-  nombres: string;
-  apellidos: string;
-  email: string;
-  departamento: string;
-  createdAt: string;
-  updatedAt: string;
+  codigo_profesor?: string;
+  nombre: string;
+  experiencia_anios?: number;
+  popularidad?: number;
+  token?: string;
 }
 
 export interface CreateProfesorDto {
-  codigo: string;
-  nombres: string;
-  apellidos: string;
-  email: string;
-  departamento: string;
+  codigo_profesor: string;
+  nombre: string;
+  experiencia_anios?: number;
+  popularidad?: number;
 }
 
 export interface Curso {
@@ -165,8 +162,9 @@ export interface Curso {
   ht: number; // Horas teoría
   hp: number; // Horas práctica
   hl: number; // Horas laboratorio
-  ciclo: number;
+  ciclo: string | number; // Puede ser número '1', '2' o texto 'Electivo'
   tipo: string;
+  sistema_eval?: string;
   createdAt?: string;
   updatedAt?: string;
 }
@@ -178,31 +176,31 @@ export interface CreateCursoDto {
   ht: number;
   hp: number;
   hl: number;
-  ciclo: number;
+  ciclo: string | number;
   tipo: string;
 }
 
 export interface CursoOfertado {
   id: number;
-  cursoId: number;
-  profesorId: number;
+  curso_id: number;
+  profesor_id: number | null;
   semestre: string;
-  seccion: string;
-  vacantes: number;
-  horario: string;
-  aula: string;
-  createdAt: string;
-  updatedAt: string;
+  codigo_seccion: string;
+  turno: string;
+  cupos_disponibles: number;
+  alumnos_matriculados: number;
+  curso?: Curso;
+  profesor?: Profesor;
 }
 
 export interface CreateCursoOfertadoDto {
-  cursoId: number;
-  profesorId: number;
+  curso_id: number;
+  profesor_id?: number;
   semestre: string;
-  seccion: string;
-  vacantes: number;
-  horario: string;
-  aula: string;
+  codigo_seccion: string;
+  turno: string;
+  cupos_disponibles: number;
+  alumnos_matriculados?: number;
 }
 
 export interface Matricula {

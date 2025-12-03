@@ -30,7 +30,13 @@ export type {
 export type {
   PredictionRequest,
   PredictionResponse,
-  PredictionResult,
+  CoursePrediction,
+  ResultFile,
+  ResultsListResponse,
+  ResultContent,
+  ModelInfo,
+  ModelsListResponse,
+  DeleteResponse,
 } from './predictorService';
 
 // Exportar tipos del recomendador

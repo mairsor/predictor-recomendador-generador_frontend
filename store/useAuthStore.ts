@@ -30,13 +30,21 @@ export const useAuthStore = create<AuthState>()(
           // Llamar a la API real del backend
           const response = await backendService.auth.login({ email, password });
 
+          // Extraer el código según el rol
+          let codigo: string | undefined = undefined;
+          if (response.user.rol === 'ALUMNO' && response.user.alumno) {
+            codigo = response.user.alumno.codigo;
+          } else if (response.user.rol === 'PROFESOR' && response.user.profesor) {
+            codigo = response.user.profesor.codigo_profesor;
+          }
+
           // Mapear la respuesta del backend al formato del frontend
           const user = {
             id: response.user.id.toString(),
             email: response.user.email,
             name: response.user.email.split('@')[0], // Usar email como nombre por ahora
             role: mapRoleToFrontend(response.user.rol),
-            codigo: response.user.alumno?.codigo || response.user.profesor?.codigo_profesor,
+            codigo: codigo,
           };
 
           const token = response.access_token;

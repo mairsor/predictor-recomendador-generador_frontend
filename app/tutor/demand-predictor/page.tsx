@@ -58,11 +58,22 @@ export default function PredictorPage() {
 
   const loadCursos = async () => {
     try {
+      console.log('Cargando cursos en tutor/demand-predictor...');
       const response = await backendService.cursos.findAll();
-      const cursosData = Array.isArray(response) ? response : ((response as any).data || []);
-      setCursos(cursosData);
+      console.log('Respuesta de cursos en tutor:', response);
+      
+      let coursesData: Curso[] = [];
+      if (Array.isArray(response)) {
+        coursesData = response;
+      } else if (response && Array.isArray(response.data)) {
+        coursesData = response.data;
+      }
+      
+      console.log('Cursos cargados en tutor:', coursesData.length);
+      setCursos(coursesData);
     } catch (err: any) {
       console.error('Error cargando cursos:', err);
+      setError('Error al cargar la lista de cursos');
     }
   };
 

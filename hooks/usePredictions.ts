@@ -21,28 +21,28 @@ export function usePredictions() {
     }
   };
 
-  const getHistory = async (limit = 10) => {
+  const listResults = async () => {
     setLoading(true);
     setError(null);
     try {
-      const result = await predictorService.getHistory(limit);
+      const result = await predictorService.listResults();
       return result;
     } catch (err: any) {
-      setError(err.response?.data?.detail || err.message || 'Error al obtener historial');
+      setError(err.response?.data?.detail || err.message || 'Error al obtener resultados');
       return null;
     } finally {
       setLoading(false);
     }
   };
 
-  const compareModels = async (courseIds?: string[]) => {
+  const listModels = async () => {
     setLoading(true);
     setError(null);
     try {
-      const result = await predictorService.compareModels(courseIds);
+      const result = await predictorService.listModels();
       return result;
     } catch (err: any) {
-      setError(err.response?.data?.detail || err.message || 'Error al comparar modelos');
+      setError(err.response?.data?.detail || err.message || 'Error al obtener modelos');
       return null;
     } finally {
       setLoading(false);
@@ -51,8 +51,8 @@ export function usePredictions() {
 
   return {
     predict,
-    getHistory,
-    compareModels,
+    listResults,
+    listModels,
     loading,
     error,
   };

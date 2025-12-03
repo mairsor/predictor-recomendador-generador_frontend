@@ -53,13 +53,13 @@ export default function SectionManager() {
   const [isEditing, setIsEditing] = useState(false);
   const [currentSection, setCurrentSection] = useState<CursoOfertadoWithDetails | null>(null);
   const [formData, setFormData] = useState({
-    cursoId: 0,
-    profesorId: 0,
+    curso_id: 0,
+    profesor_id: 0,
     semestre: '',
-    seccion: 'M',
-    vacantes: 30,
-    horario: '',
-    aula: '',
+    codigo_seccion: 'M',
+    cupos_disponibles: 30,
+    turno: '',
+    alumnos_matriculados: 0,
   });
   
   // CSV Upload state
@@ -78,9 +78,9 @@ export default function SectionManager() {
       
       console.log('Iniciando carga de datos...');
       
-      let sectionsData = [];
-      let cursosData = [];
-      let profesoresData = [];
+      let sectionsData: CursoOfertado[] = [];
+      let cursosData: Curso[] = [];
+      let profesoresData: Profesor[] = [];
       
       // Load sections with curso and profesor included from backend
       try {
@@ -94,7 +94,7 @@ export default function SectionManager() {
       try {
         const cursosResponse = await backendService.cursos.findAll();
         console.log('Cursos response recibida:', cursosResponse);
-        cursosData = Array.isArray(cursosResponse) ? cursosResponse : (cursosResponse.data || []);
+        cursosData = Array.isArray(cursosResponse) ? cursosResponse : [];
       } catch (err) {
         console.error('Error cargando cursos:', err);
       }
@@ -103,7 +103,7 @@ export default function SectionManager() {
       try {
         const profesoresResponse = await backendService.profesores.findAll();
         console.log('Profesores response recibida:', profesoresResponse);
-        profesoresData = Array.isArray(profesoresResponse) ? profesoresResponse : (profesoresResponse.data || []);
+        profesoresData = Array.isArray(profesoresResponse) ? profesoresResponse : [];
       } catch (err) {
         console.error('Error cargando profesores:', err);
       }
@@ -126,13 +126,13 @@ export default function SectionManager() {
     setIsEditing(false);
     setCurrentSection(null);
     setFormData({
-      cursoId: 0,
-      profesorId: 0,
+      curso_id: 0,
+      profesor_id: 0,
       semestre: '',
-      seccion: 'M',
-      vacantes: 30,
-      horario: '',
-      aula: '',
+      codigo_seccion: 'M',
+      cupos_disponibles: 30,
+      turno: '',
+      alumnos_matriculados: 0,
     });
     setIsDialogOpen(true);
   };
@@ -141,13 +141,13 @@ export default function SectionManager() {
     setIsEditing(true);
     setCurrentSection(section);
     setFormData({
-      cursoId: section.cursoId,
-      profesorId: section.profesorId,
+      curso_id: section.curso_id,
+      profesor_id: section.profesor_id || 0,
       semestre: section.semestre,
-      seccion: section.seccion,
-      vacantes: section.vacantes,
-      horario: section.horario,
-      aula: section.aula,
+      codigo_seccion: section.codigo_seccion,
+      cupos_disponibles: section.cupos_disponibles,
+      turno: section.turno,
+      alumnos_matriculados: section.alumnos_matriculados,
     });
     setIsDialogOpen(true);
   };
@@ -414,8 +414,8 @@ export default function SectionManager() {
             <div className="space-y-2">
               <Label>Curso *</Label>
               <Select
-                value={formData.cursoId.toString()}
-                onValueChange={(value) => setFormData({ ...formData, cursoId: parseInt(value) })}
+                value={formData.curso_id.toString()}
+                onValueChange={(value) => setFormData({ ...formData, curso_id: parseInt(value) })}
               >
                 <SelectTrigger>
                   <SelectValue placeholder="Selecciona un curso" />
@@ -433,8 +433,8 @@ export default function SectionManager() {
             <div className="space-y-2">
               <Label>Profesor *</Label>
               <Select
-                value={formData.profesorId.toString()}
-                onValueChange={(value) => setFormData({ ...formData, profesorId: parseInt(value) })}
+                value={formData.profesor_id.toString()}
+                onValueChange={(value) => setFormData({ ...formData, profesor_id: parseInt(value) })}
               >
                 <SelectTrigger>
                   <SelectValue placeholder="Selecciona un profesor" />
@@ -442,7 +442,7 @@ export default function SectionManager() {
                 <SelectContent>
                   {profesores.map((profesor) => (
                     <SelectItem key={profesor.id} value={profesor.id.toString()}>
-                      {profesor.codigo} - {profesor.nombre}
+                      {profesor.codigo_profesor || profesor.id} - {profesor.nombre}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -463,8 +463,8 @@ export default function SectionManager() {
               <Input
                 placeholder="M"
                 maxLength={1}
-                value={formData.seccion}
-                onChange={(e) => setFormData({ ...formData, seccion: e.target.value.toUpperCase() })}
+                value={formData.codigo_seccion}
+                onChange={(e) => setFormData({ ...formData, codigo_seccion: e.target.value.toUpperCase() })}
               />
             </div>
             
@@ -473,27 +473,26 @@ export default function SectionManager() {
               <Input
                 type="number"
                 min={1}
-                value={formData.vacantes}
-                onChange={(e) => setFormData({ ...formData, vacantes: parseInt(e.target.value) })}
+                value={formData.cupos_disponibles}
+                onChange={(e) => setFormData({ ...formData, cupos_disponibles: parseInt(e.target.value) })}
               />
             </div>
             
             <div className="space-y-2">
-              <Label>Horario *</Label>
-              <Input
-                placeholder="Ej: Lun-Mie 10:00-12:00"
-                value={formData.horario}
-                onChange={(e) => setFormData({ ...formData, horario: e.target.value })}
-              />
-            </div>
-            
-            <div className="space-y-2 col-span-2">
-              <Label>Aula</Label>
-              <Input
-                placeholder="Ej: A-301"
-                value={formData.aula}
-                onChange={(e) => setFormData({ ...formData, aula: e.target.value })}
-              />
+              <Label>Turno *</Label>
+              <Select
+                value={formData.turno}
+                onValueChange={(value) => setFormData({ ...formData, turno: value })}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Selecciona turno" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Mañana">Mañana</SelectItem>
+                  <SelectItem value="Tarde">Tarde</SelectItem>
+                  <SelectItem value="Noche">Noche</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
           </div>
           
