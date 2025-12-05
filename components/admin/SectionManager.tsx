@@ -94,7 +94,10 @@ export default function SectionManager() {
       try {
         const cursosResponse = await backendService.cursos.findAll();
         console.log('Cursos response recibida:', cursosResponse);
-        cursosData = Array.isArray(cursosResponse) ? cursosResponse : [];
+        // Si es un objeto paginado, extraer el array data
+        cursosData = Array.isArray(cursosResponse) 
+          ? cursosResponse 
+          : (cursosResponse as any).data || [];
       } catch (err) {
         console.error('Error cargando cursos:', err);
       }
@@ -103,7 +106,10 @@ export default function SectionManager() {
       try {
         const profesoresResponse = await backendService.profesores.findAll();
         console.log('Profesores response recibida:', profesoresResponse);
-        profesoresData = Array.isArray(profesoresResponse) ? profesoresResponse : [];
+        // Si es un objeto paginado, extraer el array data
+        profesoresData = Array.isArray(profesoresResponse) 
+          ? profesoresResponse 
+          : (profesoresResponse as any).data || [];
       } catch (err) {
         console.error('Error cargando profesores:', err);
       }

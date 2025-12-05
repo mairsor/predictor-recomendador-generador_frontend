@@ -118,6 +118,7 @@ export interface DashboardAdmin {
   semestre_actual: any;
   estadisticas_matricula: any;
   top_cursos_demanda: any;
+  cursos_baja_matricula: any;
   distribucion_ciclos: any;
   rendimiento: any;
 }

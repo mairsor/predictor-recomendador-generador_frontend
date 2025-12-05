@@ -87,7 +87,7 @@ export default function AdminDashboard() {
     );
   }
 
-  const { resumen, semestre_actual, estadisticas_matricula, top_cursos_demanda, distribucion_ciclos, rendimiento } = dashboardData;
+  const { resumen, semestre_actual, estadisticas_matricula, top_cursos_demanda, cursos_baja_matricula, distribucion_ciclos, rendimiento } = dashboardData;
 
   const statsGlobales = [
     {
@@ -242,14 +242,11 @@ export default function AdminDashboard() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              {top_cursos_demanda.length === 0 ? (
+              {!cursos_baja_matricula || cursos_baja_matricula.length === 0 ? (
                 <p className="text-center text-gray-500 py-4">No hay datos disponibles</p>
               ) : (
                 <div className="space-y-3">
-                  {[...top_cursos_demanda]
-                    .reverse()
-                    .slice(0, 5)
-                    .map((curso: any, index: number) => (
+                  {cursos_baja_matricula.map((curso: any, index: number) => (
                       <div
                         key={index}
                         className="flex items-center justify-between p-3 bg-orange-50 rounded-lg hover:bg-orange-100 transition-colors"
